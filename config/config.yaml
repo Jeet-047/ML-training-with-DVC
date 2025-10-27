@@ -3,4 +3,4 @@ data_ingestion:
 
 data_preprocessing:
   test_size: 0.25
-  max_features: 20
+  max_features: 30

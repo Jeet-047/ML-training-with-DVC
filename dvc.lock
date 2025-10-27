@@ -7,6 +7,10 @@ stages:
       hash: md5
       md5: 82cfe5deac4d824bc365f60b1779f2df
       size: 2298
+    params:
+      config/config.yaml:
+        data_ingestion.data_link: 
+          https://raw.githubusercontent.com/Jeet-047/ML-training-with-DVC/refs/heads/main/Weather-related%20disease%20prediction.csv
     outs:
     - path: data/raw_data
       hash: md5
@@ -24,19 +28,23 @@ stages:
       hash: md5
       md5: 8b90b3bad620726f8bc9b9bd32f00634
       size: 3914
+    params:
+      config/config.yaml:
+        data_preprocessing.max_features: 30
+        data_preprocessing.test_size: 0.25
     outs:
     - path: data/preprocess_data
       hash: md5
-      md5: 802456250aeb196e89ac9f9295072494.dir
-      size: 802399
+      md5: f8084104b68c9c8e4b413202dcb78266.dir
+      size: 1010459
       nfiles: 4
   model_building:
     cmd: python src/model_building.py
     deps:
     - path: data/preprocess_data
       hash: md5
-      md5: 802456250aeb196e89ac9f9295072494.dir
-      size: 802399
+      md5: f8084104b68c9c8e4b413202dcb78266.dir
+      size: 1010459
       nfiles: 4
     - path: src/model_building.py
       hash: md5
@@ -45,17 +53,17 @@ stages:
     outs:
     - path: model
       hash: md5
-      md5: ca1cea3df284bb5d6763573c44969dab.dir
-      size: 16836028
+      md5: 0aab3642cb0cda737a7fde161162f254.dir
+      size: 10080960
       nfiles: 1
   model_evaluation:
     cmd: python src/model_evaluation.py
     deps:
     - path: model/rf_model.pkl
       hash: md5
-      md5: 2d72b7df73564e11f17a0a1e89de3a83
-      size: 16836028
+      md5: 80acccb7d3b96cd8384951ba3b4bbcc3
+      size: 10080960
     - path: src/model_evaluation.py
       hash: md5
-      md5: 33c5105d9e80001c5b54aa31d11f541d
-      size: 4217
+      md5: 2b4b9cc563bb66008a6221906720d414
+      size: 4215

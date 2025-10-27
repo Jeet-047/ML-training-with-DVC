@@ -3,6 +3,9 @@ stages:
     cmd: python src/data_ingestion.py
     deps:
     - src/data_ingestion.py
+    params:
+    - config/config.yaml:
+      - data_ingestion.data_link
     outs:
     - data/raw_data
   data_preprocessing:
@@ -10,6 +13,10 @@ stages:
     deps:
     - data/raw_data/data.csv
     - src/data_preprocessing.py
+    params:
+    - config/config.yaml:
+      - data_preprocessing.test_size
+      - data_preprocessing.max_features
     outs:
     - data/preprocess_data
   model_building:
@@ -25,6 +32,7 @@ stages:
     - model/rf_model.pkl
     - src/model_evaluation.py
 params:
+- config/config.yaml
 - dvclive/params.yaml
 metrics:
 - dvclive/metrics.json
