@@ -1,0 +1,6 @@
+data_ingestion:
+  data_link: "https://raw.githubusercontent.com/Jeet-047/ML-training-with-DVC/refs/heads/main/Weather-related%20disease%20prediction.csv"
+
+data_preprocessing:
+  test_size: 0.25
+  max_features: 20

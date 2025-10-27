@@ -5,8 +5,8 @@ stages:
     deps:
     - path: src/data_ingestion.py
       hash: md5
-      md5: 753d8d48fd0bdfcf3bab387d750ad362
-      size: 2167
+      md5: 82cfe5deac4d824bc365f60b1779f2df
+      size: 2298
     outs:
     - path: data/raw_data
       hash: md5
@@ -22,17 +22,22 @@ stages:
       size: 677582
     - path: src/data_preprocessing.py
       hash: md5
-      md5: aabffa6c67b6350f61e8d4c47bbebaa3
-      size: 3471
+      md5: 8b90b3bad620726f8bc9b9bd32f00634
+      size: 3914
     outs:
     - path: data/preprocess_data
       hash: md5
-      md5: b872fd7e129341ea327e133bbae10394.dir
-      size: 802853
+      md5: 802456250aeb196e89ac9f9295072494.dir
+      size: 802399
       nfiles: 4
   model_building:
     cmd: python src/model_building.py
     deps:
+    - path: data/preprocess_data
+      hash: md5
+      md5: 802456250aeb196e89ac9f9295072494.dir
+      size: 802399
+      nfiles: 4
     - path: src/model_building.py
       hash: md5
       md5: 0b32f6c3f2e0c2ea95739bb35834a4f3
@@ -40,17 +45,17 @@ stages:
     outs:
     - path: model
       hash: md5
-      md5: 5c6954fbf35cb4eb819f7c637db7dd00.dir
-      size: 17810402
+      md5: ca1cea3df284bb5d6763573c44969dab.dir
+      size: 16836028
       nfiles: 1
   model_evaluation:
     cmd: python src/model_evaluation.py
     deps:
     - path: model/rf_model.pkl
       hash: md5
-      md5: 29988ebe4f2abf210c38e5ffa32311f1
-      size: 17810402
+      md5: 2d72b7df73564e11f17a0a1e89de3a83
+      size: 16836028
     - path: src/model_evaluation.py
       hash: md5
-      md5: 2935dd9204eb14a643d88712f72c1080
-      size: 3767
+      md5: 33c5105d9e80001c5b54aa31d11f541d
+      size: 4217

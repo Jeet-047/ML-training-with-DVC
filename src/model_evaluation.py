@@ -1,10 +1,16 @@
+import os
+import sys
+
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(parent_dir)
+
 import json
 import pandas as pd
-import os
 import logging
 import pickle
-from sklearn.kernel_approximation import RBFSampler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from dvclive import Live
+from config.get_params import load_params
 
 # Configure logging
 # Ensure the "logs" directory exists
@@ -66,6 +72,13 @@ def evaluate_model(model, xtest, ytest) -> dict:
             "recall": recall,
             "f1_score": f1 }
         logger.debug("Model is evaluated successfully!!")
+
+        with Live(save_dvc_exp=True) as live:
+            live.log_metric('accuracy', accuracy)
+            live.log_metric('precision', precision)
+            live.log_metric('recall', recall)
+            live.log_metric('f1_score', f1)
+            live.log_params(load_params(r"config\config.yaml"))
         return metrics
     except Exception as e:
         logger.error("Filed to evaluate the model %s", e)

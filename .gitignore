@@ -209,3 +209,5 @@ __marimo__/
 data
 model
 logs
+
+weather_disease.ipynb

@@ -1,10 +1,18 @@
+import os
+import sys
+
+import test
+
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(parent_dir)
+
 import pandas as pd
 import logging
-import os
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import RFE
 from sklearn.preprocessing import StandardScaler
+from config.get_params import load_params
 
 # Configure the logging
 # Ensure the "logs" directory exists
@@ -26,17 +34,17 @@ logger.addHandler(file_handler)
 
 # preprocess data function
 """This function select the important features and transform the columns"""
-def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
+def preprocess_data(data: pd.DataFrame, test_size: float, max_features: int) -> pd.DataFrame:
     try:
         # split the dependent and independent attributes
         X = data.iloc[:, :-1]
         y = data.iloc[:, -1]
         # filter the top 20 attributes
         model = RandomForestClassifier()
-        rfe = RFE(model, n_features_to_select=20)
+        rfe = RFE(model, n_features_to_select=max_features)
         X_new = rfe.fit_transform(X, y)
         # split the dataset into train test and split
-        X_train, X_test, y_train, y_test = train_test_split(X_new, y, test_size=0.2, random_state=47)
+        X_train, X_test, y_train, y_test = train_test_split(X_new, y, test_size=test_size, random_state=47)
         # standardize the attributes
         scaler = StandardScaler()
         X_train[:, 0:4] = scaler.fit_transform(X_train[:, 0:4])
@@ -67,9 +75,12 @@ def save_data(xtrain, xtest, ytrain, ytest, data_path:str) -> None:
 # define main function
 def main():
     try:
+        params = load_params(r"config\config.yaml")
+        test_size = params["data_preprocessing"]["test_size"]
+        max_features = params["data_preprocessing"]["max_features"]
         logger.info("Data pre-processing is started!!")
         data = pd.read_csv(r"data\raw_data\data.csv")
-        X_train, X_test, y_train, y_test = preprocess_data(data)
+        X_train, X_test, y_train, y_test = preprocess_data(data, test_size, max_features)
         # save data
         save_data(X_train, X_test, y_train, y_test, "data")
     except Exception as e:

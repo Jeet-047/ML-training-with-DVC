@@ -1,6 +1,12 @@
-import pandas as pd
 import os
+import sys
+
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(parent_dir)
+
+import pandas as pd
 import logging
+from config.get_params import load_params
 
 # Configure the logging
 
@@ -54,7 +60,8 @@ def save_data(data: pd.DataFrame, data_path: str) -> None:
 
 def main():
     try:
-        data_link = "https://raw.githubusercontent.com/Jeet-047/ML-training-with-DVC/refs/heads/main/Weather-related%20disease%20prediction.csv"
+        params = load_params(r"config\config.yaml")
+        data_link = params["data_ingestion"]["data_link"]
         data = load_data(data_link)
         save_data(data, "data")
         logger.info("Data Ingestion is completed")
